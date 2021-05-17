@@ -2,6 +2,7 @@ package lin.xi.chun.circular_dependency.bean_post_processor;
 
 
 import lin.xi.chun.circular_dependency.service.AService;
+import lin.xi.chun.circular_dependency.service.BService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -16,8 +17,11 @@ import org.springframework.stereotype.Component;
 public class MyBeanPostProcessor implements BeanPostProcessor {
 
     public Object postProcessBeforeInitialization(Object o, String s) throws BeansException {
-        log.info("不做处理，直接返回这个bean");
-        log.debug("xxxxxxxx");
+        if(o instanceof AService || o instanceof BService){
+            log.info("postProcessBeforeInitialization---不做处理，直接返回这个bean：{}", o);
+        }else{
+            log.debug("postProcessBeforeInitialization---不做处理，直接返回这个bean：{}", o);
+        }
         return o;
     }
 
@@ -26,7 +30,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
      * */
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if(beanName.equals("AService")){
-            log.info("bean = {}", bean);
+            log.info("postProcessAfterInitialization --- bean = {}", bean);
             /**
              * 之前说的是如果这个bean没用AOP的话，互相依赖，那么只要二级缓存就够了，
              * 因为从map缓存中获取的A的原始对象，后面经过设置之后和一开始放到B里面是同个对象。

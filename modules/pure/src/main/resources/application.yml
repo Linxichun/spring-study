@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+# 日志相关配置
+logging:
+  level.root: info
+  level.cn.com.citydo: info
+  path: /home/logs/spring-study/${server.port}/
+
+spring:
+  application:
+    name: spring-study
+  profiles:
+    # 按实际情况指定环境
+    active:  dev
